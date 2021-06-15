@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 
 
@@ -44,7 +45,13 @@ def error_percentage(x):
     return "{:.0f}".format(result)
 
 
-df = pd.read_csv('results.csv')
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument('-s', '--source', dest='source', required=True, metavar='',
+                    help="source file to be analysed. Supports *.jtl or *.csv files")
+args = parser.parse_args()
+
+df = pd.read_csv(args.source)
+
 df['responseMessage'] = df['responseMessage'].fillna('NA')
 df['timeStamp'] = pd.to_datetime(df['timeStamp'], unit='ms')
 min_time = df['timeStamp'].min()
